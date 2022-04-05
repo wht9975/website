@@ -1,0 +1,221 @@
+---
+title: "Billboard - TOP100"
+summary: 依据B榜的开放数据，对1960年至2016年的Top100歌曲进行数据分析
+date: '2022-03-21T00:00:00Z'
+tags: null
+external_link: ''
+image:
+  caption: null
+  focal_point: Smart
+links:
+- icon: download
+  icon_pack: fas
+  name: 源代码
+  url: https://pan.baidu.com/s/1hDXM2oOyw0ftD9RfG61fHg?pwd=ped4
+url_code: ''
+url_pdf: ''
+url_slides: ''
+url_video: ''
+slides: ''
+---
+
+
+
+<div id="本文利用开放r包-billboard-中的数据" class="section level3">
+<h3><strong>本文利用开放R包 <em>billboard</em> 中的数据：</strong></h3>
+<ul>
+<li>展示如何利用R以及ggplot2包进行数据分析并形成出版级别的可视化效果</li>
+<li>展现2016年年度十大歌手及其代表作品</li>
+<li>分析半个多世纪以来，年度Top100歌曲在某些特征上的时间变化</li>
+<li>对比1960年与2015年的歌曲特征，揭示不同时代的受欢迎的音乐特点</li>
+</ul>
+<p>文章包括分析代码、可视化结果以及相关的分析结论。</p>
+<p><strong>话不多说，直接进入正题</strong></p>
+</div>
+<div id="一前期准备" class="section level3">
+<h3><strong>一、前期准备</strong></h3>
+<pre class="r"><code>#首先加载会使用到的包
+library(tidyverse)
+library(MetBrewer)
+library(cowplot)
+library(billboard)
+library(extrafont)
+library(cowplot)
+library(showtext); showtext_auto()
+library(ggcorrplot)
+library(ggsci)
+library(gghalves)
+library(ggprism)
+library(ggsignif)
+library(car)
+library(ggbump)
+#从GoogleFonts导入字体
+font_add_google(&quot;Satisfy&quot;, &quot;satisfy&quot;)
+font_add_google(&quot;Sacramento&quot;, &quot;mento&quot;)
+font_add_google(&quot;Lobster&quot;, &quot;lobster&quot;)
+font_add_google(&quot;Luckiest Guy&quot;, &quot;luck&quot;)
+font_add_google(&quot;Calligraffitti&quot;, &quot;call&quot;)
+font_add_google(&quot;Kalam&quot;, &quot;kalam&quot;)
+font_add_google(&quot;ZCOOL KuaiLe&quot;, &quot;cool&quot;)</code></pre>
+<pre class="r"><code>#读入数据
+head(spotify_track_data)</code></pre>
+<pre><code>## # A tibble: 6 x 23
+##   year  artist_name   artist_id explicit track_name track_id danceability energy
+##   &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;     &lt;lgl&gt;    &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;  &lt;dbl&gt;
+## 1 1960  Percy Faith ~ 24DQLSng~ FALSE    &quot;The Them~ 2kKL5kk~        0.466  0.389
+## 2 1960  Jim Reeves    2Ev0e8GU~ FALSE    &quot;He&#39;ll Ha~ 7DH5dXV~        0.554  0.186
+## 3 1960  Johnny Prest~ 1B8n8vtE~ FALSE    &quot;Running ~ 60DbxCJ~        0.758  0.462
+## 4 1960  Mark Dinning  55Rf9Kfq~ FALSE    &quot;Teen Ang~ 7GvhZ0F~        0.583  0.168
+## 5 1960  Brenda Lee    4cPHsZM9~ FALSE    &quot;I&#39;m Sorr~ 5VyBNCS~        0.567  0.141
+## 6 1960  Elvis Presley 43ZHCT0c~ FALSE    &quot;It&#39;s Now~ 2u8Lrq2~        0.635  0.391
+## # ... with 15 more variables: key &lt;int&gt;, loudness &lt;dbl&gt;, mode &lt;int&gt;,
+## #   speechiness &lt;dbl&gt;, acousticness &lt;dbl&gt;, instrumentalness &lt;dbl&gt;,
+## #   liveness &lt;dbl&gt;, valence &lt;dbl&gt;, tempo &lt;dbl&gt;, type &lt;chr&gt;, uri &lt;chr&gt;,
+## #   track_href &lt;chr&gt;, analysis_url &lt;chr&gt;, duration_ms &lt;int&gt;,
+## #   time_signature &lt;int&gt;</code></pre>
+<pre class="r"><code>head(wiki_hot_100s)</code></pre>
+<pre><code>##   no                     title              artist year
+## 1  1 Theme from A Summer Place         Percy Faith 1960
+## 2  2          He&#39;ll Have to Go          Jim Reeves 1960
+## 3  3             Cathy&#39;s Clown The Everly Brothers 1960
+## 4  4              Running Bear      Johnny Preston 1960
+## 5  5                Teen Angel        Mark Dinning 1960
+## 6  6                 I&#39;m Sorry          Brenda Lee 1960</code></pre>
+<p>从表格中可以看到<strong>wiki_hot_100s</strong>数据反映了从1960年到2016年的年度TOP100单曲，包含四个变量：</p>
+<ol style="list-style-type: decimal">
+<li>歌曲排行：no</li>
+<li>歌曲名称：title</li>
+<li>歌手名称：artist</li>
+<li>歌曲年份：year</li>
+</ol>
+<p><strong>spotify_track_data</strong>数据则反映了其中大部分歌曲在多个特征维度上的评价情况</p>
+<p>:raised_hands:前期工作完成:raised_hands:</p>
+<p>下面尝试对这些数据进行分析，看看能不能得到什么有趣的结果</p>
+</div>
+<div id="二正式分析" class="section level3">
+<h3><strong>二、正式分析</strong></h3>
+<div id="歌手排名" class="section level4">
+<h4><strong>1.歌手排名</strong></h4>
+<p>经过大致的数据浏览，我决定选取2016年的数据，以<strong>歌曲上榜数量</strong>以及<strong>歌曲平均排行</strong>为指标，决出当年的十大歌手。</p>
+<pre class="r"><code>#数据清洗
+singer &lt;- wiki_hot_100s %&gt;%
+  mutate(year = as.numeric(year),
+         no = as.numeric(no)) %&gt;%
+  filter(year %in% 2016 &amp; no &lt;= 100) %&gt;% #选出目标数据并过滤缺失数据
+  group_by(artist) %&gt;%
+  mutate(best = min(no),
+         num = n(),
+         no_all = sum(no)) %&gt;% #找到每个歌手的最佳作品和上榜歌曲总数
+  ungroup %&gt;%
+  mutate(mean_no = no_all/num) %&gt;%
+  arrange(desc(num), mean_no) %&gt;%
+  group_by(artist) %&gt;%
+  mutate(rank = 1:n()) %&gt;%
+  filter(rank == 1) %&gt;%
+  select(-c(year,rank,no)) %&gt;%
+  ungroup() %&gt;%
+  mutate(rank = row_number())
+#选择前10歌手
+top_10 &lt;- singer[1:10,] %&gt;%
+  mutate( angle = 360 - rank*(360 / (max(rank)+1)),
+          angle = ifelse(angle &lt; -90, angle +180, angle),
+          mean_no = round(mean_no)) #计算平均歌曲排名</code></pre>
+<pre class="r"><code>#结果可视化
+image = &quot;https://raw.githubusercontent.com/wht9975/website/master/images/loveuself.png&quot;
+#子图1
+top_10 %&gt;%
+  ggplot()+
+  ggimage::geom_image(aes(x = 0, y = -1.5, image = image),size=0.19) +
+  geom_col(aes(x=rank, y=num, fill = artist),show.legend = F, width = 0.95)+
+  coord_polar(theta = &#39;x&#39;,direction = 1,start = -0.3)+
+  ylim(c(-1.5,5))+
+  xlim(c(0,11))+
+  theme_void()+
+  geom_text(aes(x = rank, y=as.numeric(num)+1,label = artist),
+            size=18, family = &#39;satisfy&#39;, fontface = &#39;bold&#39;, vjust = -0.1) +
+  geom_text(aes(x = rank, y=as.numeric(num)+1,label = paste(title,&#39;-&#39;,best)),
+            size=11, family = &#39;call&#39;, fontface = &#39;bold&#39;, vjust = 1.7, color = &#39;#716e77&#39;, hjust = 0.55) +
+  geom_text(aes(x = 0.25, y=2.8),label = &#39;The year of&#39;, 
+           size=28, family = &#39;lobster&#39;, fontface = &#39;bold&#39;, hjust = 1)+
+  geom_text(data = data.frame(label=factor(c(&#39;2&#39;,&#39;0&#39;,&#39;1&#39;,&#39;6&#39;)),
+                              y = c(12/4, 9/4, 6/4, 3/4)), 
+            aes(x = c(0.5,0.5,0.45,0.5) , y = y , label = label),vjust = 1,hjust = 1,
+            size = 25,  family = &#39;kalam&#39;, fontface = &#39;bold&#39;) +
+  geom_text(aes(x = rank, y=as.numeric(num)/2, label = rank, size =rank),
+            color = &#39;white&#39;,family = &#39;kalam&#39;,show.legend = F) +
+  scale_size_continuous(range = c(32,16)) +
+  scale_fill_manual(values = met.brewer(&#39;Hokusai1&#39;,n=10)) -&gt;song_2016
+
+#子图2
+top_10 %&gt;%
+  ggplot(aes(x = rank, y = 100 - mean_no, fill = artist))+
+  geom_col(aes(y=100),color = &#39;lightgrey&#39;,fill = &#39;white&#39;, lty = &#39;dashed&#39;, size = 0.8)+
+  geom_col(aes(color = artist),show.legend = F,size = 0.8)+
+  scale_fill_manual(values = met.brewer(&#39;Hokusai1&#39;,n=10))+
+  scale_color_manual(values = met.brewer(&#39;Hokusai1&#39;,n=10))+
+  geom_hline(yintercept = c(50,75),color = &#39;#716e77&#39;,lty = &#39;dashed&#39;,size = 0.8)+
+  geom_text(aes(y = -4, label = artist),
+            size=14, family = &#39;satisfy&#39;, fontface = &#39;bold&#39;)+
+  theme_minimal()+
+  theme(panel.grid = element_blank(),
+        # axis.line.x = element_line(size = 2),
+        axis.title = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(family = &#39;kalam&#39;,size = 64, hjust = 0.5),
+        plot.margin = margin(8,2,1,2,unit = &#39;mm&#39;)) +
+  scale_x_continuous(expand = c(0,0))+
+  scale_y_continuous(breaks=c(0,50,75,100, 120), labels = c(&#39;&#39;,50,25,1, &#39;&#39;)) -&gt; song_col
+
+#图片合并
+ggdraw()+
+  draw_plot(song_2016, x = 0.025,y = 0.175,width = 0.95,height = 0.95)+
+  draw_plot(song_col, x = 0.125, y = 0.025,width = 0.75,height = 0.35)+
+  draw_plot_label(c(&quot;M&quot;,&quot;e&quot;,&quot;a&quot;,&quot;n&quot;), x = rep((0.07),4), y = seq(0.35,0.15,length.out=4),
+                  size = 96, family = &#39;kalam&#39;,hjust = 0.5)+
+  draw_plot_label(c(&quot;R&quot;,&quot;a&quot;,&quot;n&quot;,&quot;k&quot;), x = rep((0.095),4), y = seq(0.32,0.15,length.out=4),
+                  size = 84, family = &#39;kalam&#39;,hjust = 0.5) -&gt; song_all
+  
+#ggsave(&quot;2016.png&quot;, song_all, width = 16, height = 9, units = &#39;in&#39;,bg = &#39;white&#39;)</code></pre>
+<p><img src="2016.png" /> 通过环形图可以看到<strong>Justin Bieber</strong>凭借其<strong>Love Yourself</strong>（总排名1）以及总共三首上榜歌曲荣登2016年度榜首。排名其后的是<strong>Twenty One Pilots</strong>、<strong>Adele</strong>以及<strong>The Weekend</strong>均有三首佳作上榜。之后的几名歌手均有两首歌曲进入Top100,根据他们的平均歌曲排名（下方柱状图）确定最终排名。</p>
+</div>
+<div id="特征关联" class="section level4">
+<h4><strong>2.特征关联</strong></h4>
+<p>本部分尝试分析Spotify在评定歌曲时依据的各项指标间的关系，并通过相关图展示最后结果</p>
+<pre class="r"><code>#数据清洗
+feather &lt;-  spotify_track_data %&gt;% 
+  rename(artist=artist_name,
+         title = track_name) %&gt;% 
+  group_by(year) %&gt;% 
+  mutate(rank = 1:n()) %&gt;%
+  ungroup
+
+feather_all &lt;- feather  %&gt;%
+  select(-c(year,artist,artist_id,track_href,title,track_id,key,type,uri,analysis_url,duration_ms,time_signature,explicit)) #去除无关数据
+
+
+cor = round(cor(feather_all, method = &#39;pearson&#39;),2) #对特征变量间进行两两相关分析
+p.mat &lt;- cor_pmat(feather_all) #计算相关显著性</code></pre>
+<pre class="r"><code>#数据可视化
+ggcorrplot(cor, method = &#39;circle&#39;,hc.order = TRUE, 
+                      outline.color = &quot;white&quot;,type = &quot;lower&quot;,
+                      lab = F, digits = 2,lab_size = 4, lab_col = &#39;black&#39;,
+                      colors = c(&#39;#128b8e&#39;,&#39;#FFF5C3&#39;,&quot;#fb3c3c&quot;),
+                      ggtheme = theme_minimal())+
+  guides(fill = guide_colorbar(direction = &#39;horizontal&#39;,
+                               barwidth = unit(12,&#39;cm&#39;),
+                               ticks = F)) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x = element_text(size = 28, angle = 30,family = &#39;call&#39;, hjust = 0.6, vjust = 0.9),
+        axis.text.y = element_text(size = 28, family = &#39;call&#39;),
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_blank(),
+        plot.margin = margin(20,3,3,3,unit = &#39;mm&#39;),
+        legend.title = element_blank(),
+        legend.text = element_text(size = 20,family = &#39;mento&#39;),
+        legend.position = (&#39;top&#39;)) -&gt; corplot
+
+#ggsave(&quot;feather_cor.png&quot;, corplot,width = 20, height = 20, units = &#39;cm&#39;,bg = &#39;white&#39;,dpi = 300)</code></pre>
+<p><img src="feather_cor.png" /></p>
+</div>
+</div>
