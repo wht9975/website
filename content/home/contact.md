@@ -19,7 +19,7 @@ content:
   form:
     provider: netlify
     netlify:
-      captcha: true
+      captcha: false
 
   # Contact details (edit or remove options as required)
   email: wht9975@163.com
