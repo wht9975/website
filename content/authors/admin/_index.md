@@ -19,8 +19,8 @@ bio: 少年辛苦终身事，莫向光阴惰寸功
 # Interests to show in About widget
 interests:
 - 数据分析与可视化
-- 音乐认知与音乐预期研究
-- 用户研究与可用性测试
+- 胡思乱想
+- 尝试各种类型的游戏
 
 # Education to show in About widget
 education:
@@ -70,6 +70,6 @@ email: ""
 highlight_name: true
 ---
 
-我是一名在读的心理学研究生
+欢迎来到我的网页！我叫王汉通，浙江嘉兴人，现就读于南京师范大学应用心理专业。研究的方向主要是音乐与语言认知以及两者的内在关联，在课题组内主要从事数据分析工作。当前的目标是成为一名用户研究员，并为此不断努力奋斗。
 
 {{< icon name="download" pack="fas" >}}下载我的{{< staticref "uploads/resume.pdf" "newtab" >}}简历{{< /staticref >}}
