@@ -17,9 +17,9 @@ content:
   
   # Email form provider
   form:
-    provider: formspree
-    formspree:
-      id: https://formspree.io/f/xayvdkyo
+    provider: netlify
+    netlify:
+      captcha: true
 
   # Contact details (edit or remove options as required)
   email: wht9975@163.com
