@@ -12,6 +12,10 @@ links:
   icon_pack: fas
   name: 源代码
   url: https://pan.baidu.com/s/1hDXM2oOyw0ftD9RfG61fHg?pwd=ped4
+- icon: github
+  icon_pack: fab
+  name: Gitbub
+  url: https://github.com/wht9975/Date-analysis
 url_code: ''
 url_pdf: ''
 url_slides: ''

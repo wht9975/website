@@ -11,7 +11,11 @@ links:
 - icon: download
   icon_pack: fas
   name: 源代码
-  url: https://pan.baidu.com/s/1kppaQFZWztB4k_z3sKwFyA?pwd=x7hi
+  url: https://pan.baidu.com/s/1hDXM2oOyw0ftD9RfG61fHg?pwd=ped4
+- icon: github
+  icon_pack: fab
+  name: Gitbub
+  url: https://github.com/wht9975/Date-analysis
 url_code: ''
 url_pdf: ''
 url_slides: ''
@@ -135,10 +139,10 @@ top_10 %&gt;%
             size=18, family = &#39;satisfy&#39;, fontface = &#39;bold&#39;, vjust = -0.1) +
   geom_text(aes(x = rank, y=as.numeric(num)+1,label = paste(title,&#39;-&#39;,best)),
             size=11, family = &#39;call&#39;, fontface = &#39;bold&#39;, vjust = 1.7, color = &#39;#716e77&#39;, hjust = 0.55) +
-  geom_text(aes(x = 0.25, y=2.8),label = &#39;The year of&#39;,
+  geom_text(aes(x = 0.25, y=2.8),label = &#39;The year of&#39;, 
            size=28, family = &#39;lobster&#39;, fontface = &#39;bold&#39;, hjust = 1)+
   geom_text(data = data.frame(label=factor(c(&#39;2&#39;,&#39;0&#39;,&#39;1&#39;,&#39;6&#39;)),
-                              y = c(12/4, 9/4, 6/4, 3/4)),
+                              y = c(12/4, 9/4, 6/4, 3/4)), 
             aes(x = c(0.5,0.5,0.45,0.5) , y = y , label = label),vjust = 1,hjust = 1,
             size = 25,  family = &#39;kalam&#39;, fontface = &#39;bold&#39;) +
   geom_text(aes(x = rank, y=as.numeric(num)/2, label = rank, size =rank),
@@ -174,7 +178,7 @@ ggdraw()+
                   size = 96, family = &#39;kalam&#39;,hjust = 0.5)+
   draw_plot_label(c(&quot;R&quot;,&quot;a&quot;,&quot;n&quot;,&quot;k&quot;), x = rep((0.095),4), y = seq(0.32,0.15,length.out=4),
                   size = 84, family = &#39;kalam&#39;,hjust = 0.5) -&gt; song_all
-
+  
 #ggsave(&quot;2016.png&quot;, song_all, width = 16, height = 9, units = &#39;in&#39;,bg = &#39;white&#39;)</code></pre>
 <p><img src="2016.png" /></p>
 <p>通过环形图可以看到<strong>Justin Bieber</strong>凭借其<strong>Love Yourself</strong>（总排名1）以及总共三首上榜歌曲荣登2016年度榜首。排名其后的是<strong>Twenty One Pilots</strong>、<strong>Adele</strong>以及<strong>The Weekend</strong>均有三首佳作上榜。之后的几名歌手均有两首歌曲进入Top100,根据他们的平均歌曲排名（下方柱状图）确定最终排名。</p>
@@ -183,10 +187,10 @@ ggdraw()+
 <h4><strong>2.特征关联</strong></h4>
 <p>本部分尝试分析Spotify在评定歌曲时依据的各项指标间的关系，并通过相关图展示最后结果</p>
 <pre class="r"><code>#数据清洗
-feather &lt;-  spotify_track_data %&gt;%
+feather &lt;-  spotify_track_data %&gt;% 
   rename(artist=artist_name,
-         title = track_name) %&gt;%
-  group_by(year) %&gt;%
+         title = track_name) %&gt;% 
+  group_by(year) %&gt;% 
   mutate(rank = 1:n()) %&gt;%
   ungroup
 
@@ -197,7 +201,7 @@ feather_all &lt;- feather  %&gt;%
 cor = round(cor(feather_all, method = &#39;pearson&#39;),2) #对特征变量间进行两两相关分析
 p.mat &lt;- cor_pmat(feather_all) #计算相关显著性</code></pre>
 <pre class="r"><code>#数据可视化
-ggcorrplot(cor, method = &#39;circle&#39;,hc.order = TRUE,
+ggcorrplot(cor, method = &#39;circle&#39;,hc.order = TRUE, 
                       outline.color = &quot;white&quot;,type = &quot;lower&quot;,
                       lab = F, digits = 2,lab_size = 4, lab_col = &#39;black&#39;,
                       colors = c(&#39;#128b8e&#39;,&#39;#FFF5C3&#39;,&quot;#fb3c3c&quot;),
@@ -273,7 +277,7 @@ feather_year %&gt;%
   theme(legend.title = element_blank(),
         legend.text = element_text(size = 18, family = &#39;call&#39;),
         legend.position = &#39;top&#39;,
-        axis.text.x = element_text(size = 18, angle = 15,family = &#39;call&#39;,
+        axis.text.x = element_text(size = 18, angle = 15,family = &#39;call&#39;, 
                                    hjust = 0.5, vjust = 0.9),
         axis.text.y = element_text(size = 24, family = &#39;call&#39;),
         axis.title = element_text(size = 40, family = &#39;kalam&#39;),
@@ -322,55 +326,55 @@ leveneTest(data_dance$value,factor(data_dance$fill),center=mean)</code></pre>
 data_energy &lt;- compare[compare$fill == &#39;#D0938B&#39;| compare$fill == &#39;#BA5555&#39;,]
 leveneTest(data_energy$value,factor(data_energy$fill),center=mean)</code></pre>
 <pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = mean)
-##        Df F value  Pr(&gt;F)
+##        Df F value  Pr(&gt;F)  
 ## group   1  6.6239 0.01084 *
-##       186
+##       186                  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code>#valence
 data_valence &lt;- compare[compare$fill == &#39;#D2B577&#39;| compare$fill == &#39;#BB683F&#39;,]
 leveneTest(data_valence$value,factor(data_valence$fill),center=mean)</code></pre>
 <pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = mean)
-##        Df F value  Pr(&gt;F)
+##        Df F value  Pr(&gt;F)  
 ## group   1  3.1566 0.07725 .
-##       186
+##       186                  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre class="r"><code>t.test(value ~ fill,data_dance, paired = F, var.equal = F)</code></pre>
-<pre><code>##
+<pre><code>## 
 ##  Welch Two Sample t-test
-##
+## 
 ## data:  value by fill
 ## t = 5.1498, df = 185.72, p-value = 6.615e-07
 ## alternative hypothesis: true difference in means between group #356CA2 and group #35999D is not equal to 0
 ## 95 percent confidence interval:
 ##  0.06701662 0.15024701
 ## sample estimates:
-## mean in group #356CA2 mean in group #35999D
+## mean in group #356CA2 mean in group #35999D 
 ##             0.6584318             0.5498000</code></pre>
 <pre class="r"><code>t.test(value ~ fill,data_energy, paired = F, var.equal = T)</code></pre>
-<pre><code>##
+<pre><code>## 
 ##  Two Sample t-test
-##
+## 
 ## data:  value by fill
 ## t = 10.39, df = 186, p-value &lt; 2.2e-16
 ## alternative hypothesis: true difference in means between group #BA5555 and group #D0938B is not equal to 0
 ## 95 percent confidence interval:
 ##  0.1997677 0.2934115
 ## sample estimates:
-## mean in group #BA5555 mean in group #D0938B
+## mean in group #BA5555 mean in group #D0938B 
 ##             0.7039886             0.4573990</code></pre>
 <pre class="r"><code>t.test(value ~ fill,data_valence, paired = F, var.equal = F)</code></pre>
-<pre><code>##
+<pre><code>## 
 ##  Welch Two Sample t-test
-##
+## 
 ## data:  value by fill
 ## t = -3.8158, df = 185.98, p-value = 0.0001847
 ## alternative hypothesis: true difference in means between group #BB683F and group #D2B577 is not equal to 0
 ## 95 percent confidence interval:
 ##  -0.20338511 -0.06475407
 ## sample estimates:
-## mean in group #BB683F mean in group #D2B577
+## mean in group #BB683F mean in group #D2B577 
 ##             0.5388534             0.6729230</code></pre>
 <pre class="r"><code># 根据统计结果进行可视化展示
 ggplot(compare, aes(y=value))+
@@ -378,15 +382,15 @@ ggplot(compare, aes(y=value))+
             position = position_dodge(0.2),alpha = 0.35, color = &#39;grey&#39;)+
   geom_point(aes(x = dotx, group = no,fill = fill),color = &#39;white&#39;,
              position = position_dodge(0.2), shape = 21, size =2,alpha = 0.6)+
-  geom_half_violin(data = compare[compare$year == &#39;1960&#39;,],
+  geom_half_violin(data = compare[compare$year == &#39;1960&#39;,], 
                    aes(x = vlinx,fill = fill),
                    side = &#39;l&#39;,size = 0.3, trim = T,alpha = 0.8,color = &#39;white&#39;)+
-  geom_half_violin(data = compare[compare$year == &#39;2015&#39;,],
+  geom_half_violin(data = compare[compare$year == &#39;2015&#39;,], 
                    aes(x = vlinx,fill = fill),side = &#39;r&#39;,
                    size = 0.3, trim = T,alpha = 0.8,color = &#39;white&#39;)+
-  geom_boxplot(aes(x = vlinx, group = year), color = &#39;white&#39;, fill = &#39;#B9C8E3&#39;,
+  geom_boxplot(aes(x = vlinx, group = year), color = &#39;white&#39;, fill = &#39;#B9C8E3&#39;, 
                width = 0.2, size = 0.2, outlier.shape = NA,alpha = 0.5)+
-  stat_summary(aes(x = vlinx, color = fill), fun.data = &quot;mean_cl_normal&quot;,
+  stat_summary(aes(x = vlinx, color = fill), fun.data = &quot;mean_cl_normal&quot;, 
                fun.args = list(conf.int = .95), geom = &#39;errorbar&#39;,
                width = 0.08,size = 0.5)+
   geom_signif(data = data.frame(index = c(&quot;danceability&quot;,&quot;energy&quot;,&#39;valence&#39;)),
@@ -412,8 +416,8 @@ ggplot(compare, aes(y=value))+
 
 ggsave(&#39;wind&amp;rain.png&#39;,compare_plot,width=16,height = 8)</code></pre>
 <p><img src="wind&amp;rain.png" /></p>
-<p>结果反映1960与2015间Top100歌曲在效价、能量值与舞动性均存在统计学意义上的<strong>显著性差异</strong>，总体变化趋势与第三部分的结果一致。</p>
+<p>结果反应1960与2015间Top100歌曲在效价、能量值与舞动性均存在统计学意义上的<strong>显著性差异</strong>，总体变化趋势与第三部分的结果一致。</p>
 <p>:wave::wave:
-以上就是本文的全部内容了，如果有什么建议欢迎联系我:iphone::email:</p>
+以上就是本文的全部内容了，如果有什么建议欢迎联系我:iphone::love_letter:</p>
 </div>
 </div>
