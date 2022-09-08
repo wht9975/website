@@ -16,16 +16,16 @@ subtitle:
 # - Add/remove as many `feature` blocks below as you like.
 # - For available icons, see: https://wowchemy.com/docs/page-builder/#icons
 feature:
-- description: 能制作高质量的产品原型
-  icon: axure
+- description: 定性定量研究方法
+  icon: analy
   icon_pack: custom
   name: 原型制作
-- description: 丰富的R & Python数据分析经验
+- description: 数据分析经验
   icon: analysis
   icon_pack: custom
   name: 数据分析
 
-- description: 追求优雅的展现数据结果
+- description: 数据可视化能力
   icon: visual
   icon_pack: custom
   name: 结果可视化
