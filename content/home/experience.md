@@ -22,7 +22,23 @@ date_format: 2006 - 01
 #   Leave `date_end` empty if it's your current employer.
 #   Begin multi-line descriptions with YAML's `|2-` multi-line prefix.
 experience:
-  - title: 专业课讲师
+  - title: 有品电商部用户研究员
+    company: 小米通讯技术有限公司
+    company_url: ''
+    company_logo: ''
+    location: 实习
+    date_start: '2022-07-01'
+    date_end: '至今'
+    description: |2-
+        工作职责:
+        
+        * 完成自研商品内测工作，提升商品的用户体验。包括商品卖点测试、商品功能体验测试以及商品外观包装测试。内测结果以报告形式交付产品经理与项目经理以决定内测商品能否上架。
+        * 根据需求进行相关用研工作。包含商品概念阶段的需求分析、商品的用户画像分析、商品价格敏感度测试等。目前输出需求调研报告 2 篇，用户画像报告 2 篇。
+        * 开展有品 APP搜索功能体验穿测，每周拦访60名用户参与测试，结果以测试周报形式输出至有品全员反馈群。
+        * 参与有品流失用户调研项目，电话邀约30名平台流失用户参与线上深访并担任访谈观察员。
+
+  
+  - title: 心理统计学科讲师
     company: 众学简快教育科技有限公司
     company_url: ''
     company_logo: ''
@@ -32,9 +48,8 @@ experience:
     description: |2-
         工作职责:
         
-        * 开展线上教学工作，负责直播在线授课与气氛维护，参与学员互动。
-        * 进行课程设计、课件制作、大纲撰写。
-        * 维护百人以上学员社群，负责日常答疑解惑，课程通知，鼓励学习。
+        * 开展心理统计学科教学工作，包括课程设计、课件制作、课后作业布置等。
+        * 维护百人以上学员社群，负责日常答疑解惑，课程通知，学习鼓励等。
         
   # - title: Professor of Semiconductor Physics
   #   company: University X

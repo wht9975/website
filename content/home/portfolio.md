@@ -9,7 +9,7 @@ headless: true
 # Order that this section appears on the page.
 weight: 65
 
-title: 作品展示
+title: 个人项目
 subtitle: ''
 
 content:

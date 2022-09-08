@@ -16,16 +16,16 @@ subtitle:
 # - Add/remove as many `feature` blocks below as you like.
 # - For available icons, see: https://wowchemy.com/docs/page-builder/#icons
 feature:
-- description: 定性定量研究方法
+- description: 掌握基本定性定量研究方法
   icon: analy
   icon_pack: custom
-  name: 原型制作
-- description: 数据分析经验
+  name: 方法基础
+- description: 丰富的数据分析经验
   icon: analysis
   icon_pack: custom
   name: 数据分析
 
-- description: 数据可视化能力
+- description: 追求美观的呈现分析结果
   icon: visual
   icon_pack: custom
   name: 结果可视化
