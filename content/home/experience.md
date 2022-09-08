@@ -28,7 +28,7 @@ experience:
     company_logo: ''
     location: 实习
     date_start: '2022-07-01'
-    date_end: '至今'
+    date_end: 
     description: |2-
         工作职责:
         
