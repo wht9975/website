@@ -10,7 +10,7 @@ main:
   - name: 个人经历
     url: '#experience'
     weight: 20
-  - name: 作品展示
+  - name: 个人项目
     url: '#portfolio'
     weight: 30
 #  - name: Talks
